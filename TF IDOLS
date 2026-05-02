@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>C-POP IDOLS</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: white;
+    }
+
+    .app {
+      max-width: 900px;
+      margin: auto;
+      padding: 10px;
+    }
+
+    .header {
+      text-align: center;
+      padding: 10px;
+      font-size: 22px;
+      font-weight: bold;
+      background: #111827;
+      border-radius: 10px;
+    }
+
+    .stats {
+      background: #1f2937;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .bar {
+      background: #374151;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 5px 0;
+    }
+
+    .fill {
+      height: 10px;
+      background: #22c55e;
+    }
+
+    .section {
+      margin-top: 15px;
+      background: #1f2937;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #ec4899;
+      color: white;
+      cursor: pointer;
+    }
+
+    .members {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .member {
+      background: #111827;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .member img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 5px;
+    }
+
+    .feed {
+      height: 120px;
+      overflow-y: auto;
+      font-size: 13px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="header">🎤 C-POP IDOLS</div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="section">
+    <b>🎮 Actions</b><br>
+    <button onclick="action('train')">Train</button>
+    <button onclick="action('social')">Social</button>
+    <button onclick="action('dance')">Dance</button>
+    <button onclick="action('vocal')">Vocal</button>
+    <button onclick="action('rest')">Rest</button>
+  </div>
+
+  <div class="section">
+    <b>🌍 Events</b><br>
+    <button onclick="fanMeeting()">Fan Meet</button>
+    <button onclick="concert()">Concert</button>
+  </div>
+
+  <div class="section">
+    <b>👤 Members</b>
+    <div class="members" id="members"></div>
+  </div>
+
+  <div class="section">
+    <b>💬 Fan Feed</b>
+    <div class="feed" id="feed"></div>
+  </div>
+
+</div>
+
+<script>
+
+// STATS
+let stats = { popularity: 50, energy: 50, vocal: 50, dance: 50 };
+let time = { day: 1, hour: 12 };
+
+// MEMBERS WITH IMAGES
+let members = [
+  { name: "Zhang Guiyuan", mood: 80, img: "https://i.pravatar.cc/150?img=1" },
+  { name: "Zhang Hanrui", mood: 75, img: "https://i.pravatar.cc/150?img=2" },
+  { name: "Yang Bowen", mood: 78, img: "https://i.pravatar.cc/150?img=3" },
+  { name: "Zhou Qihan", mood: 85, img: "https://i.pravatar.cc/150?img=4" },
+  { name: "Wang Lujie", mood: 70, img: "https://i.pravatar.cc/150?img=5" },
+  { name: "Chen Yiheng", mood: 82, img: "https://i.pravatar.cc/150?img=6" },
+  { name: "Chen Junming", mood: 90, img: "https://i.pravatar.cc/150?img=7" },
+  { name: "Chen Sihan", mood: 88, img: "https://i.pravatar.cc/150?img=8" }
+];
+
+// UI UPDATE
+function updateUI() {
+  document.getElementById("stats").innerHTML = `
+    📅 Day ${time.day} | ⏰ ${time.hour}:00<br>
+    ⭐ Popularity: ${stats.popularity}
+    <div class="bar"><div class="fill" style="width:${stats.popularity}%"></div></div>
+
+    🎵 Vocal
+    <div class="bar"><div class="fill" style="width:${stats.vocal}%"></div></div>
+
+    💃 Dance
+    <div class="bar"><div class="fill" style="width:${stats.dance}%"></div></div>
+
+    😴 Energy
+    <div class="bar"><div class="fill" style="width:${stats.energy}%"></div></div>
+  `;
+
+  document.getElementById("members").innerHTML =
+    members.map(m => `
+      <div class="member">
+        <img src="${m.img}">
+        <b>${m.name}</b><br>
+        Mood: ${m.mood}
+      </div>
+    `).join("");
+}
+
+// FAN FEED
+function addFeed(text) {
+  let feed = document.getElementById("feed");
+  feed.innerHTML = "• " + text + "<br>" + feed.innerHTML;
+}
+
+// ACTIONS
+function action(type) {
+  stats.energy -= 5;
+  stats.popularity += Math.floor(Math.random()*5);
+  addFeed("Fans are reacting to your activity 👀");
+  updateUI();
+}
+
+// EVENTS
+function fanMeeting() {
+  stats.popularity += 10;
+  addFeed("Fans loved the fan meeting 💖");
+  updateUI();
+}
+
+function concert() {
+  stats.popularity += 20;
+  addFeed("Concert was AMAZING 🔥");
+  updateUI();
+}
+
+// TIME LOOP
+setInterval(() => {
+  time.hour++;
+  if (time.hour >= 24) {
+    time.hour = 0;
+    time.day++;
+  }
+
+  stats.energy -= 1;
+
+  if (Math.random() < 0.3) {
+    addFeed("Fans are trending your group online 📱");
+  }
+
+  updateUI();
+}, 2000);
+
+updateUI();
+
+</script>
+
+</body>
+</html>
